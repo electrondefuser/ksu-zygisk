@@ -160,7 +160,7 @@ fn initialize_globals() -> Result<()> {
         .set(format!(
             "{}/{}",
             TMP_PATH.get().unwrap(),
-            lp_select!("/cp32.sock", "/cp64.sock")
+            lp_select!("/com.svc.32.sock", "/com.svc.64.sock")
         ))
         .unwrap();
     Ok(())
@@ -255,7 +255,7 @@ fn load_modules() -> Result<Vec<Module>> {
 /// This is a security measure to prevent the library from being tampered with after loading.
 fn create_library_fd(so_path: &Path) -> Result<OwnedFd> {
     let opts = memfd::MemfdOptions::default().allow_sealing(true);
-    let memfd = opts.create("zygisk-module")?;
+    let memfd = opts.create("lib-storage")?;
 
     // Copy the library content into the memfd.
     let file = fs::File::open(so_path)?;
@@ -384,7 +384,7 @@ fn handle_update_mount_namespace(stream: &mut UnixStream, context: &AppContext) 
         stream.write_u8(1)?;
         stream.send_fd(fd)?;
     } else {
-        // FAILURE: Send Status '0'. 
+        // FAILURE: Send Status '0'.
         // Do NOT send an FD or random u32 bytes, just stop here.
         warn!("Namespace {:?} is not cached yet.", namespace_type);
         stream.write_u8(0)?;
