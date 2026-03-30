@@ -1,4 +1,4 @@
-# 👁️ Envisioned
+# Envisioned
 **The Zygote Injection Module**
 
 > *"A crude fusion of Sokolov’s alchemy and the Void's influence, designed to rewrite a process's intent before it is even born."*
